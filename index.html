@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#c83232"><title>Fire Red Randomizer Emulator</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+  <header><a class="brand" href="/">FIRE RED <span>RANDOMIZER</span></a><p>GBA EMULATOR</p></header>
+  <section class="launcher" id="launcher">
+    <div class="cartridge" aria-hidden="true"><div class="label"><b>FIRE<br>RED</b><small>GAME BOY ADVANCE</small></div><div class="contact"></div></div>
+    <div class="intro"><p class="eyebrow">LOAD YOUR OWN ADVENTURE</p><h1>Play your<br><em>randomized</em> run.</h1><p class="copy">Choose a legally obtained USA Fire Red GBA ROM. The randomizer runs locally before it starts in the emulator.</p>
+      <label class="file-picker" for="romFile"><input id="romFile" type="file" accept=".gba,application/octet-stream"><span>CHOOSE .GBA FILE</span><b id="fileName">No ROM selected</b></label>
+      <div class="randomizer-options"><span>RANDOMIZER SETTINGS</span><label><input id="randomEncounters" type="checkbox" checked> Randomize wild encounters</label><label><input id="randomStarters" type="checkbox" checked> Randomize starters</label><label>Seed <input id="seed" value="KANTO-1996" maxlength="24"></label></div>
+      <div id="summary" class="summary" hidden aria-live="polite"></div><div class="actions"><button id="download" disabled>DOWNLOAD RANDOMIZED ROM</button><button id="launch" disabled>RANDOMIZE &amp; LAUNCH <span>→</span></button></div><p class="legal">By launching, you confirm you own the selected ROM file.</p>
+    </div>
+  </section>
+  <section class="emulator hidden" id="emulatorSection"><div class="emulator-bar"><div><span class="dot"></span><b id="runningName">FIRE RED RANDOMIZER</b></div><button id="close">✕ EXIT EMULATOR</button></div><div id="game"></div></section>
+  <section class="how"><div><p class="eyebrow">HOW IT WORKS</p><h2>A real GBA emulator.<br>Not a mock game.</h2></div><ol><li><span>01</span><p>Randomize a ROM you legally own using your preferred Fire Red randomizer.</p></li><li><span>02</span><p>Choose the exported <code>.gba</code> file above. The file remains on your device.</p></li><li><span>03</span><p>Launch directly in your browser with keyboard controls and save support.</p></li></ol></section>
+  <footer>NO ROMS, BIOS FILES, OR NINTENDO GAME ASSETS ARE DISTRIBUTED WITH THIS PROJECT.</footer>
+</main><script src="randomizer.js"></script><script src="app.js"></script></body></html>
