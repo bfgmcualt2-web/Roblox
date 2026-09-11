@@ -10,7 +10,7 @@ const summary = document.querySelector('#summary');
 let romFile;
 let randomized;
 
-fileInput.addEventListener('change', () => {
+fileInput.addEventListener('change', async () => {
   const [selected] = fileInput.files;
   if (!selected) return;
   const hasGbaExtension = selected.name.toLowerCase().endsWith('.gba');
@@ -20,6 +20,14 @@ fileInput.addEventListener('change', () => {
   launchButton.disabled = !hasGbaExtension;
   downloadButton.disabled = !hasGbaExtension;
   summary.hidden = true;
+  if (romFile) {
+    try {
+      const support = FireRedRandomizer.describeSupport(await romFile.arrayBuffer());
+      fileName.textContent = `${selected.name} — FireRed ${support.region} (${support.gameCode}) revision ${support.revision} detected`;
+    } catch {
+      // Keep the filename visible; launch will show the detailed compatibility error.
+    }
+  }
 });
 
 async function buildRandomizedRom() {

@@ -2,7 +2,7 @@
 
 This is a browser launcher for a **legally obtained, user-supplied Game Boy Advance ROM**. It uses EmulatorJS to run the selected `.gba` file in the browser; no ROM is included, uploaded, or stored by this repository.
 
-Choose a legally obtained USA FireRed `.gba` file (game code `BPRE`), select the randomizer options and seed, then launch. The in-browser randomizer makes a temporary copy of the ROM, randomizing wild-encounter tables and the three starters before the emulator starts. The original file is not changed, uploaded, or stored.
+Choose a legally obtained FireRed `.gba` file, select the randomizer options and seed, then launch. The randomizer accepts official FireRed game codes (`BPR*`), identifies the wild-table and original starter pattern structurally, and supports USA plus international revisions without assuming one fixed regional offset. The in-browser randomizer makes a temporary copy of the ROM, randomizing wild-encounter tables and the three starters before the emulator starts. The original file is not changed, uploaded, or stored.
 
 ## Run locally
 
