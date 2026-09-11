@@ -1,48 +1,95 @@
-const starters = [
-  ['Charmander', '🔥', 'fire', 'A bold start for a hot-blooded journey.'],
-  ['Squirtle', '💧', 'water', 'Cool-headed and ready for every route.'],
-  ['Bulbasaur', '🌿', 'grass', 'Steady growth for a surprising adventure.'],
-  ['Pikachu', '⚡', 'electric', 'A bright spark for an unpredictable Kanto.'],
-  ['Eevee', '✨', 'electric', 'Potential in every step of the way.']
-];
-
+const fileInput = document.querySelector('#romFile');
+const fileName = document.querySelector('#fileName');
+const launchButton = document.querySelector('#launch');
+const launcher = document.querySelector('#launcher');
+const emulatorSection = document.querySelector('#emulatorSection');
+const runningName = document.querySelector('#runningName');
 const seedInput = document.querySelector('#seed');
-const starterName = document.querySelector('#starterName');
-const starterOrb = document.querySelector('#starterOrb');
-const starterDescription = document.querySelector('#starterDescription');
-const seedReadout = document.querySelector('#seedReadout');
-const difficultyReadout = document.querySelector('#difficultyReadout');
+const downloadButton = document.querySelector('#download');
+const summary = document.querySelector('#summary');
+let romFile;
+let randomized;
 
-function hashSeed(value) {
-  return [...value].reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
-}
-function normalizeSeed(value) {
-  return value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '') || 'KANTO-1996';
-}
-function renderRun() {
-  const seed = normalizeSeed(seedInput.value);
-  seedInput.value = seed;
-  const hash = Math.abs(hashSeed(seed));
-  const starter = starters[hash % starters.length];
-  starterName.textContent = starter[0];
-  starterOrb.className = `starter-orb ${starter[2]}`;
-  starterOrb.innerHTML = `<span>${starter[1]}</span>`;
-  starterDescription.textContent = starter[3];
-  seedReadout.textContent = seed;
-  const randomized = document.querySelector('[data-choice="trainers"] .active').dataset.value === 'Randomized';
-  difficultyReadout.textContent = randomized || !document.querySelector('#evolutions').checked ? 'CHALLENGER' : 'ADVENTURER';
-}
-
-document.querySelectorAll('.choice').forEach((button) => button.addEventListener('click', () => {
-  const group = button.parentElement;
-  group.querySelectorAll('.choice').forEach((choice) => choice.classList.remove('active'));
-  button.classList.add('active');
-}));
-document.querySelector('#settingsForm').addEventListener('submit', (event) => { event.preventDefault(); renderRun(); document.querySelector('.result-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-document.querySelector('#dice').addEventListener('click', () => { seedInput.value = `KANTO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; renderRun(); });
-document.querySelector('#copyButton').addEventListener('click', async (event) => {
-  const code = `${seedReadout.textContent} · ${document.querySelector('[data-choice="encounters"] .active').dataset.value} · ${difficultyReadout.textContent}`;
-  try { await navigator.clipboard.writeText(code); event.currentTarget.innerHTML = 'RUN CODE COPIED ✓'; setTimeout(() => { event.currentTarget.innerHTML = 'COPY RUN CODE <span>⧉</span>'; }, 1600); } catch { event.currentTarget.textContent = code; }
+fileInput.addEventListener('change', () => {
+  const [selected] = fileInput.files;
+  if (!selected) return;
+  const hasGbaExtension = selected.name.toLowerCase().endsWith('.gba');
+  romFile = hasGbaExtension ? selected : undefined;
+  randomized = undefined;
+  fileName.textContent = hasGbaExtension ? selected.name : 'Please choose a .gba file';
+  launchButton.disabled = !hasGbaExtension;
+  downloadButton.disabled = !hasGbaExtension;
+  summary.hidden = true;
 });
-document.querySelector('#themeButton').addEventListener('click', () => document.body.classList.toggle('dark'));
-renderRun();
+
+async function buildRandomizedRom() {
+  if (randomized) return randomized;
+  randomized = FireRedRandomizer.randomize(await romFile.arrayBuffer(), {
+    seed: seedInput.value.trim() || 'KANTO-1996',
+    encounters: document.querySelector('#randomEncounters').checked,
+    starters: document.querySelector('#randomStarters').checked
+  });
+  const parts = [];
+  if (randomized.result.encounterSlots) parts.push(`${randomized.result.encounterSlots} wild encounter slots`);
+  if (randomized.result.starters.length) parts.push(`${randomized.result.starters.length} starter choices`);
+  summary.textContent = `Verified changes: ${parts.join(' and ') || 'no randomizer options selected'}. Seed: ${seedInput.value.trim() || 'KANTO-1996'}.`;
+  summary.hidden = false;
+  return randomized;
+}
+
+function downloadRom(buffer) {
+  const url = URL.createObjectURL(new Blob([buffer], { type: 'application/octet-stream' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${romFile.name.replace(/\.gba$/i, '')}-randomized.gba`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+downloadButton.addEventListener('click', async () => {
+  if (!romFile) return;
+  try { downloadRom((await buildRandomizedRom()).buffer); }
+  catch (error) { fileName.textContent = error.message; randomized = undefined; }
+});
+seedInput.addEventListener('input', () => { randomized = undefined; summary.hidden = true; });
+document.querySelectorAll('#randomEncounters,#randomStarters').forEach((input) => input.addEventListener('change', () => { randomized = undefined; summary.hidden = true; }));
+
+function showLoadError() {
+  document.querySelector('#game').innerHTML = '<p style="color:#fff;font:14px DM Mono,monospace;padding:35px;text-align:center;line-height:1.7">The emulator runtime could not be loaded.<br>Please check your connection and refresh the page.</p>';
+}
+
+launchButton.addEventListener('click', async () => {
+  if (!romFile) return;
+  launchButton.disabled = true;
+  launchButton.firstChild.textContent = 'RANDOMIZING… ';
+  let randomized;
+  try {
+    randomized = await buildRandomizedRom();
+  } catch (error) {
+    fileName.textContent = error.message;
+    launchButton.disabled = false;
+    launchButton.firstChild.textContent = 'RANDOMIZE & LAUNCH ';
+    return;
+  }
+  const gameUrl = URL.createObjectURL(new Blob([randomized.buffer], { type: 'application/octet-stream' }));
+  runningName.textContent = romFile.name.toUpperCase();
+  launcher.classList.add('hidden');
+  emulatorSection.classList.remove('hidden');
+  document.querySelector('#game').innerHTML = '<p style="color:#fff;font:14px DM Mono,monospace">Loading GBA emulator…</p>';
+
+  // EmulatorJS consumes these globals when its loader script is evaluated.
+  window.EJS_player = '#game';
+  window.EJS_core = 'gba';
+  window.EJS_gameUrl = gameUrl;
+  window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+  window.EJS_startOnLoaded = true;
+  window.EJS_color = '#c83232';
+
+  const loader = document.createElement('script');
+  loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+  loader.async = true;
+  loader.onerror = showLoadError;
+  document.body.append(loader);
+});
+
+document.querySelector('#close').addEventListener('click', () => window.location.reload());

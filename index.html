@@ -1,62 +1,17 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#df3034" />
-    <title>Kanto Remix — Fire Red Randomizer</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <header class="topbar">
-        <a class="brand" href="#top" aria-label="Kanto Remix home"><span class="brand-mark">K</span><span>KANTO <b>REMIX</b></span></a>
-        <nav aria-label="Primary navigation"><a href="#randomizer">Randomizer</a><a href="#how-it-works">How it works</a></nav>
-        <button class="icon-button" id="themeButton" aria-label="Toggle dark mode">◐</button>
-      </header>
-
-      <section class="hero" id="top">
-        <div class="hero-copy">
-          <p class="eyebrow">A NEW KANTO ADVENTURE</p>
-          <h1>Every route.<br /><em>Unexpected.</em></h1>
-          <p class="lede">Build a one-of-a-kind Fire Red-inspired run. Pick your rules, lock your seed, and take on a fresh Kanto.</p>
-          <a class="primary-link" href="#randomizer">START A RUN <span>↓</span></a>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="sun"></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
-          <div class="tall-grass"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="pokeball"><span></span></div>
-          <p class="art-label">ROUTE <b>0</b></p>
-        </div>
-      </section>
-
-      <section class="randomizer-section" id="randomizer">
-        <div class="section-heading"><div><p class="eyebrow">MAKE IT YOURS</p><h2>Set the rules.</h2></div><p>Your settings are baked into a shareable seed.</p></div>
-        <div class="randomizer-grid">
-          <form class="settings-card" id="settingsForm">
-            <div class="setting-block"><div class="setting-title"><span class="number">01</span><div><h3>Wild encounters</h3><p>Who is waiting in the tall grass?</p></div></div>
-              <div class="choice-grid" data-choice="encounters"><button type="button" class="choice active" data-value="Area 1-to-1">Area 1-to-1<small>Catch 'em all</small></button><button type="button" class="choice" data-value="Completely random">Completely random<small>Anything goes</small></button></div></div>
-            <div class="setting-block"><div class="setting-title"><span class="number">02</span><div><h3>Trainer teams</h3><p>Give every battle a new edge.</p></div></div>
-              <div class="choice-grid" data-choice="trainers"><button type="button" class="choice active" data-value="Type themed">Type themed<small>Fair, but fresh</small></button><button type="button" class="choice" data-value="Randomized">Randomized<small>Expect surprises</small></button></div></div>
-            <div class="setting-block"><div class="setting-title"><span class="number">03</span><div><h3>Starter picks</h3><p>Start with a different partner.</p></div></div>
-              <label class="switch-row"><span>Shuffle starters</span><input id="starters" type="checkbox" checked /><span class="switch"></span></label>
-              <label class="switch-row"><span>Keep evolution lines</span><input id="evolutions" type="checkbox" checked /><span class="switch"></span></label></div>
-            <div class="seed-row"><label for="seed">RUN SEED</label><div><input id="seed" value="KANTO-1996" maxlength="24" /><button type="button" id="dice" aria-label="Generate seed">⚄</button></div></div>
-            <button class="generate" type="submit">GENERATE MY RUN <span>→</span></button>
-          </form>
-
-          <aside class="result-card" aria-live="polite">
-            <div class="result-top"><p class="eyebrow">YOUR NEXT ADVENTURE</p><span class="status"><i></i> READY</span></div>
-            <div class="result-main"><p class="result-label">YOUR PARTNER</p><h3 id="starterName">Charmander</h3><div class="starter-orb fire" id="starterOrb"><span>🔥</span></div><p id="starterDescription">A bold start for a hot-blooded journey.</p></div>
-            <div class="run-details"><div><span>SEED</span><b id="seedReadout">KANTO-1996</b></div><div><span>DIFFICULTY</span><b id="difficultyReadout">ADVENTURER</b></div></div>
-            <button class="copy-button" id="copyButton" type="button">COPY RUN CODE <span>⧉</span></button>
-          </aside>
-        </div>
-      </section>
-
-      <section class="steps" id="how-it-works"><div><p class="eyebrow">NO PATCHING REQUIRED</p><h2>Pick. Generate.<br />Play your way.</h2></div><ol><li><span>1</span><div><h3>Choose your chaos</h3><p>Tune encounters, trainers, starters, and more to match your mood.</p></div></li><li><span>2</span><div><h3>Save your seed</h3><p>Every setting is tied to a seed, so a great run is never lost.</p></div></li><li><span>3</span><div><h3>Begin the remix</h3><p>Share the challenge with friends or take Kanto on solo.</p></div></li></ol></section>
-      <footer><span>© 2024 KANTO REMIX</span><span>Made for fresh adventures. No game assets included.</span></footer>
-    </main>
-    <script src="app.js"></script>
-  </body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#c83232"><title>Fire Red Randomizer Emulator</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+  <header><a class="brand" href="/">FIRE RED <span>RANDOMIZER</span></a><p>GBA EMULATOR</p></header>
+  <section class="launcher" id="launcher">
+    <div class="cartridge" aria-hidden="true"><div class="label"><b>FIRE<br>RED</b><small>GAME BOY ADVANCE</small></div><div class="contact"></div></div>
+    <div class="intro"><p class="eyebrow">LOAD YOUR OWN ADVENTURE</p><h1>Play your<br><em>randomized</em> run.</h1><p class="copy">Choose a legally obtained USA Fire Red GBA ROM. The randomizer runs locally before it starts in the emulator.</p>
+      <label class="file-picker" for="romFile"><input id="romFile" type="file" accept=".gba,application/octet-stream"><span>CHOOSE .GBA FILE</span><b id="fileName">No ROM selected</b></label>
+      <div class="randomizer-options"><span>RANDOMIZER SETTINGS</span><label><input id="randomEncounters" type="checkbox" checked> Randomize wild encounters</label><label><input id="randomStarters" type="checkbox" checked> Randomize starters</label><label>Seed <input id="seed" value="KANTO-1996" maxlength="24"></label></div>
+      <div id="summary" class="summary" hidden aria-live="polite"></div><div class="actions"><button id="download" disabled>DOWNLOAD RANDOMIZED ROM</button><button id="launch" disabled>RANDOMIZE &amp; LAUNCH <span>→</span></button></div><p class="legal">By launching, you confirm you own the selected ROM file.</p>
+    </div>
+  </section>
+  <section class="emulator hidden" id="emulatorSection"><div class="emulator-bar"><div><span class="dot"></span><b id="runningName">FIRE RED RANDOMIZER</b></div><button id="close">✕ EXIT EMULATOR</button></div><div id="game"></div></section>
+  <section class="how"><div><p class="eyebrow">HOW IT WORKS</p><h2>A real GBA emulator.<br>Not a mock game.</h2></div><ol><li><span>01</span><p>Randomize a ROM you legally own using your preferred Fire Red randomizer.</p></li><li><span>02</span><p>Choose the exported <code>.gba</code> file above. The file remains on your device.</p></li><li><span>03</span><p>Launch directly in your browser with keyboard controls and save support.</p></li></ol></section>
+  <footer>NO ROMS, BIOS FILES, OR NINTENDO GAME ASSETS ARE DISTRIBUTED WITH THIS PROJECT.</footer>
+</main><script src="randomizer.js"></script><script src="app.js"></script></body></html>
